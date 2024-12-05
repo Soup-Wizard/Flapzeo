@@ -1,0 +1,111 @@
+[gd_scene load_steps=5 format=3 uid="uid://cmm1pop2vvc2a"]
+
+[ext_resource type="Script" path="res://scenes/main.gd" id="1_vkh73"]
+[ext_resource type="Texture2D" uid="uid://p7vnr6ej6pyh" path="res://assets/Greenleaf-backdrop.png" id="1_xbqs4"]
+[ext_resource type="PackedScene" uid="uid://dpt27apqyem70" path="res://scenes/player.tscn" id="2_fqnhv"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_kpyyf"]
+size = Vector2(1160, 29)
+
+[node name="main" type="Node2D"]
+script = ExtResource("1_vkh73")
+
+[node name="scoreLabel" type="RichTextLabel" parent="."]
+unique_name_in_owner = true
+visible = false
+top_level = true
+texture_filter = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -16.0
+offset_right = 16.0
+offset_bottom = 24.0
+grow_horizontal = 2
+size_flags_horizontal = 4
+size_flags_vertical = 0
+theme_override_font_sizes/normal_font_size = 32
+fit_content = true
+scroll_active = false
+autowrap_mode = 0
+
+[node name="gameOver" type="RichTextLabel" parent="."]
+unique_name_in_owner = true
+visible = false
+top_level = true
+texture_filter = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -91.5
+offset_top = -22.5
+offset_right = 91.5
+offset_bottom = 22.5
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 6
+size_flags_vertical = 4
+theme_override_font_sizes/normal_font_size = 64
+text = "CLAIM DENIED
+Press Space to retry"
+fit_content = true
+scroll_active = false
+autowrap_mode = 0
+
+[node name="startLabel" type="RichTextLabel" parent="."]
+unique_name_in_owner = true
+top_level = true
+texture_filter = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -91.5
+offset_top = -22.5
+offset_right = 91.5
+offset_bottom = 22.5
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 6
+size_flags_vertical = 4
+theme_override_font_sizes/normal_font_size = 64
+text = "Press 'Space' to start"
+fit_content = true
+scroll_active = false
+autowrap_mode = 0
+
+[node name="ParallaxBackground" type="ParallaxBackground" parent="."]
+
+[node name="ParallaxLayer" type="ParallaxLayer" parent="ParallaxBackground"]
+position = Vector2(557, 526)
+motion_scale = Vector2(1, 0)
+motion_mirroring = Vector2(1113, 0)
+
+[node name="Sprite2D" type="Sprite2D" parent="ParallaxBackground/ParallaxLayer"]
+texture = ExtResource("1_xbqs4")
+
+[node name="player" parent="." instance=ExtResource("2_fqnhv")]
+unique_name_in_owner = true
+position = Vector2(214, 185)
+
+[node name="Timer" type="Timer" parent="."]
+wait_time = 3.0
+
+[node name="deathZone" type="Node2D" parent="."]
+
+[node name="dropDead" type="Area2D" parent="deathZone"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="deathZone/dropDead"]
+position = Vector2(570, 738.5)
+shape = SubResource("RectangleShape2D_kpyyf")
+
+[node name="wallZone" type="Node2D" parent="."]
+
+[node name="spawn" type="Node2D" parent="."]
+position = Vector2(214, 185)
+
+[connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]
+[connection signal="body_entered" from="deathZone/dropDead" to="." method="_on_drop_dead_body_entered"]
